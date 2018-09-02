@@ -1,9 +1,5 @@
-package com.yingwu.digital;
+package old;
 
-
-import com.yingwu.digital.service.WebSocketService;
-import com.yingwu.digital.service.impl.BuissnesWebSocketServiceImpl;
-import com.yingwu.digital.service.impl.WebSoketClient;
 
 /**
  * WebSocket API使用事例

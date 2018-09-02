@@ -1,8 +1,5 @@
-package com.yingwu.digital.service.impl;
+package old;
 
-
-import com.yingwu.digital.service.WebSocketBase;
-import com.yingwu.digital.service.WebSocketService;
 
 /**
  * 通过继承WebSocketBase创建WebSocket客户端

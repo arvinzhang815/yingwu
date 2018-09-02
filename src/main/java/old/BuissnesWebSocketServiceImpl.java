@@ -1,7 +1,5 @@
-package com.yingwu.digital.service.impl;
+package old;
 
-import com.yingwu.digital.service.WebSocketBase;
-import com.yingwu.digital.service.WebSocketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
