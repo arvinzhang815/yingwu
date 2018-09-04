@@ -1,6 +1,7 @@
 package com.yingwu.digital.utils.webSocketClient;
 
 import com.alibaba.fastjson.JSONObject;
+import com.yingwu.digital.base.DigitalException;
 import com.yingwu.digital.utils.GZipUtil;
 import com.yingwu.digital.utils.GameUtil;
 import io.netty.buffer.ByteBuf;
@@ -57,6 +58,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
 
         // ## 需要解压的二进制数据
         String str = GZipUtil.deToString(GameUtil.toBytes(buf));
+        saveData(str);
         System.out.println(str);
 
         JSONObject json = JSONObject.parseObject(str);
@@ -78,5 +80,10 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         }
 
         ctx.close();
+    }
+
+    private void saveData(String data) throws DigitalException{
+        JSONObject jsonObject = JSONObject.parseObject(data);
+        if(jsonObject.get("ch"))
     }
 }
