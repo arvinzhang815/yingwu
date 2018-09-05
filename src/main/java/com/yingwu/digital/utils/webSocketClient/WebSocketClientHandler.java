@@ -2,6 +2,9 @@ package com.yingwu.digital.utils.webSocketClient;
 
 import com.alibaba.fastjson.JSONObject;
 import com.yingwu.digital.base.DigitalException;
+import com.yingwu.digital.bean.POJO.KLine;
+import com.yingwu.digital.bean.dto.KlineDto;
+import com.yingwu.digital.dao.KLineMapper;
 import com.yingwu.digital.utils.GZipUtil;
 import com.yingwu.digital.utils.GameUtil;
 import io.netty.buffer.ByteBuf;
@@ -12,9 +15,16 @@ import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.tools.Diagnostic;
+import java.util.HashMap;
+import java.util.Map;
 
 public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> {
 
+    @Autowired
+    private KLineMapper kLineMapper;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketClientHandler.class);
 
@@ -82,8 +92,31 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         ctx.close();
     }
 
-    private void saveData(String data) throws DigitalException{
-        JSONObject jsonObject = JSONObject.parseObject(data);
-        if(jsonObject.get("ch"))
+    private static void saveData(String data) throws DigitalException{
+        String testData = "{\"ch\":\"market.btcusdt.kline.1min\",\"ts\":1536115667264,\"tick\":{\"id\":1536115620,\"open\":7382.710000000000000000,\"close\":7382.790000000000000000,\"low\":7382.710000000000000000,\"high\":7384.550000000000000000,\"amount\":13.972300000000000000,\"vol\":103160.295965000000000000000000000000000000,\"count\":34}}\n";
+        JSONObject jsonObject = JSONObject.parseObject(testData);
+        if(jsonObject.getString("ch").contains("kline")){
+            KLine klineDto = JSONObject.parseObject(testData,KLine.class);
+            klineDto.setKlinId(klineDto.getId().toString());
+            klineDto.setId(null);
+            Map<String,String> returnMap = getSymbolByCh(jsonObject.getString("ch"));
+            klineDto.setChannel(jsonObject.getString("ch"));
+            klineDto.setTs(jsonObject.getString("ts"));
+            klineDto.setsymbol(returnMap.get("symbol"));
+            klineDto.setPeriod(returnMap.get("period"));
+            kLineMapper.insert(klineDto);
+            System.out.println(klineDto);
+        }
+    }
+    private static Map<String,String> getSymbolByCh(String ch){
+        String[] beginIndex = ch.split("\\.");
+        Map<String,String> returnMap = new HashMap<>();
+        returnMap.put("symbol",beginIndex[1]);
+        returnMap.put("period",beginIndex[3]);
+        return returnMap;
+    }
+
+    public static void main(String[] args) {
+        saveData("");
     }
 }

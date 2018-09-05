@@ -14,13 +14,13 @@
     <result column="high" property="high" jdbcType="DECIMAL" />
     <result column="vol" property="vol" jdbcType="DECIMAL" />
     <result column="period" property="period" jdbcType="VARCHAR" />
-    <result column="symbo" property="symbo" jdbcType="VARCHAR" />
+    <result column="symbol" property="symbol" jdbcType="VARCHAR" />
     <result column="ext1" property="ext1" jdbcType="VARCHAR" />
     <result column="ext2" property="ext2" jdbcType="VARCHAR" />
     <result column="ext3" property="ext3" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, channel, ts, kLin_id, amount, count, open, close, low, high, vol, period, symbo, 
+    id, channel, ts, kLin_id, amount, count, open, close, low, high, vol, period, symbol,
     ext1, ext2, ext3
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -37,12 +37,12 @@
     insert into t_kLine (id, channel, ts, 
       kLin_id, amount, count, 
       open, close, low, high, 
-      vol, period, symbo, 
+      vol, period, symbol,
       ext1, ext2, ext3)
     values (#{id,jdbcType=INTEGER}, #{channel,jdbcType=VARCHAR}, #{ts,jdbcType=VARCHAR}, 
       #{klinId,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, #{count,jdbcType=DECIMAL}, 
       #{open,jdbcType=DECIMAL}, #{close,jdbcType=DECIMAL}, #{low,jdbcType=DECIMAL}, #{high,jdbcType=DECIMAL}, 
-      #{vol,jdbcType=DECIMAL}, #{period,jdbcType=VARCHAR}, #{symbo,jdbcType=VARCHAR}, 
+      #{vol,jdbcType=DECIMAL}, #{period,jdbcType=VARCHAR}, #{symbol,jdbcType=VARCHAR},
       #{ext1,jdbcType=VARCHAR}, #{ext2,jdbcType=VARCHAR}, #{ext3,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yingwu.digital.bean.POJO.KLine" >
@@ -84,8 +84,8 @@
       <if test="period != null" >
         period,
       </if>
-      <if test="symbo != null" >
-        symbo,
+      <if test="symbol != null" >
+        symbol,
       </if>
       <if test="ext1 != null" >
         ext1,
@@ -134,8 +134,8 @@
       <if test="period != null" >
         #{period,jdbcType=VARCHAR},
       </if>
-      <if test="symbo != null" >
-        #{symbo,jdbcType=VARCHAR},
+      <if test="symbol != null" >
+        #{symbol,jdbcType=VARCHAR},
       </if>
       <if test="ext1 != null" >
         #{ext1,jdbcType=VARCHAR},
@@ -184,8 +184,8 @@
       <if test="period != null" >
         period = #{period,jdbcType=VARCHAR},
       </if>
-      <if test="symbo != null" >
-        symbo = #{symbo,jdbcType=VARCHAR},
+      <if test="symbol != null" >
+        symbol = #{symbol,jdbcType=VARCHAR},
       </if>
       <if test="ext1 != null" >
         ext1 = #{ext1,jdbcType=VARCHAR},
@@ -212,7 +212,7 @@
       high = #{high,jdbcType=DECIMAL},
       vol = #{vol,jdbcType=DECIMAL},
       period = #{period,jdbcType=VARCHAR},
-      symbo = #{symbo,jdbcType=VARCHAR},
+      symbol = #{symbol,jdbcType=VARCHAR},
       ext1 = #{ext1,jdbcType=VARCHAR},
       ext2 = #{ext2,jdbcType=VARCHAR},
       ext3 = #{ext3,jdbcType=VARCHAR}

@@ -13,13 +13,13 @@
     <result column="low" property="low" jdbcType="DECIMAL" />
     <result column="high" property="high" jdbcType="DECIMAL" />
     <result column="vol" property="vol" jdbcType="DECIMAL" />
-    <result column="symbo" property="symbo" jdbcType="VARCHAR" />
+    <result column="symbol" property="symbol" jdbcType="VARCHAR" />
     <result column="ext1" property="ext1" jdbcType="VARCHAR" />
     <result column="ext2" property="ext2" jdbcType="VARCHAR" />
     <result column="ext3" property="ext3" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, ts, request_id, amount, count, open, close, tick_id, low, high, vol, symbo, ext1, 
+    id, ts, request_id, amount, count, open, close, tick_id, low, high, vol, symbol, ext1,
     ext2, ext3
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -36,12 +36,12 @@
     insert into t_maket_detail (id, ts, request_id, 
       amount, count, open, 
       close, tick_id, low, 
-      high, vol, symbo, ext1, 
+      high, vol, symbol, ext1,
       ext2, ext3)
     values (#{id,jdbcType=INTEGER}, #{ts,jdbcType=VARCHAR}, #{requestId,jdbcType=VARCHAR}, 
       #{amount,jdbcType=DECIMAL}, #{count,jdbcType=DECIMAL}, #{open,jdbcType=DECIMAL}, 
       #{close,jdbcType=DECIMAL}, #{tickId,jdbcType=VARCHAR}, #{low,jdbcType=DECIMAL}, 
-      #{high,jdbcType=DECIMAL}, #{vol,jdbcType=DECIMAL}, #{symbo,jdbcType=VARCHAR}, #{ext1,jdbcType=VARCHAR}, 
+      #{high,jdbcType=DECIMAL}, #{vol,jdbcType=DECIMAL}, #{symbol,jdbcType=VARCHAR}, #{ext1,jdbcType=VARCHAR},
       #{ext2,jdbcType=VARCHAR}, #{ext3,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yingwu.digital.bean.POJO.MarketDetail" >
@@ -80,8 +80,8 @@
       <if test="vol != null" >
         vol,
       </if>
-      <if test="symbo != null" >
-        symbo,
+      <if test="symbol != null" >
+        symbol,
       </if>
       <if test="ext1 != null" >
         ext1,
@@ -127,8 +127,8 @@
       <if test="vol != null" >
         #{vol,jdbcType=DECIMAL},
       </if>
-      <if test="symbo != null" >
-        #{symbo,jdbcType=VARCHAR},
+      <if test="symbol != null" >
+        #{symbol,jdbcType=VARCHAR},
       </if>
       <if test="ext1 != null" >
         #{ext1,jdbcType=VARCHAR},
@@ -174,8 +174,8 @@
       <if test="vol != null" >
         vol = #{vol,jdbcType=DECIMAL},
       </if>
-      <if test="symbo != null" >
-        symbo = #{symbo,jdbcType=VARCHAR},
+      <if test="symbol != null" >
+        symbol = #{symbol,jdbcType=VARCHAR},
       </if>
       <if test="ext1 != null" >
         ext1 = #{ext1,jdbcType=VARCHAR},
@@ -201,7 +201,7 @@
       low = #{low,jdbcType=DECIMAL},
       high = #{high,jdbcType=DECIMAL},
       vol = #{vol,jdbcType=DECIMAL},
-      symbo = #{symbo,jdbcType=VARCHAR},
+      symbol = #{symbol,jdbcType=VARCHAR},
       ext1 = #{ext1,jdbcType=VARCHAR},
       ext2 = #{ext2,jdbcType=VARCHAR},
       ext3 = #{ext3,jdbcType=VARCHAR}

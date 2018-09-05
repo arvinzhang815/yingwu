@@ -11,7 +11,7 @@ import java.util.List;
 public class KlineDto {
     private String ch;
     private String ts;//时间
-    private List<Tick> tick;
+    private Tick tick;
 
     private class Tick{
         private String id;//K线id,
@@ -149,11 +149,11 @@ public class KlineDto {
     }
 
 
-    public List<Tick> getTick() {
+    public Tick getTick() {
         return tick;
     }
 
-    public void setTick(List<Tick> tick) {
+    public void setTick(Tick tick) {
         this.tick = tick;
     }
 

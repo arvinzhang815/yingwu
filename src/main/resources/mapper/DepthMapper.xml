@@ -12,10 +12,10 @@
     <result column="ext2" property="ext2" jdbcType="VARCHAR" />
     <result column="ext3" property="ext3" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="VARCHAR" />
-    <result column="symbo" property="symbo" jdbcType="VARCHAR" />
+    <result column="symbol" property="symbol" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, channel, ts, bids, asks, request_id, ext1, ext2, ext3, type, symbo
+    id, channel, ts, bids, asks, request_id, ext1, ext2, ext3, type, symbol
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -31,11 +31,11 @@
     insert into t_depth (id, channel, ts, 
       bids, asks, request_id, 
       ext1, ext2, ext3, type, 
-      symbo)
+      symbol)
     values (#{id,jdbcType=INTEGER}, #{channel,jdbcType=VARCHAR}, #{ts,jdbcType=VARCHAR}, 
       #{bids,jdbcType=VARCHAR}, #{asks,jdbcType=VARCHAR}, #{requestId,jdbcType=VARCHAR}, 
       #{ext1,jdbcType=VARCHAR}, #{ext2,jdbcType=VARCHAR}, #{ext3,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
-      #{symbo,jdbcType=VARCHAR})
+      #{symbol,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yingwu.digital.bean.POJO.Depth" >
     insert into t_depth
@@ -70,8 +70,8 @@
       <if test="type != null" >
         type,
       </if>
-      <if test="symbo != null" >
-        symbo,
+      <if test="symbol != null" >
+        symbol,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -105,8 +105,8 @@
       <if test="type != null" >
         #{type,jdbcType=VARCHAR},
       </if>
-      <if test="symbo != null" >
-        #{symbo,jdbcType=VARCHAR},
+      <if test="symbol != null" >
+        #{symbol,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -140,8 +140,8 @@
       <if test="type != null" >
         type = #{type,jdbcType=VARCHAR},
       </if>
-      <if test="symbo != null" >
-        symbo = #{symbo,jdbcType=VARCHAR},
+      <if test="symbol != null" >
+        symbol = #{symbol,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -157,7 +157,7 @@
       ext2 = #{ext2,jdbcType=VARCHAR},
       ext3 = #{ext3,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
-      symbo = #{symbo,jdbcType=VARCHAR}
+      symbol = #{symbol,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

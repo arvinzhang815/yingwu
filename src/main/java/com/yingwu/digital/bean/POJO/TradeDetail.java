@@ -25,7 +25,7 @@ public class TradeDetail {
 
     private String tradeId;
 
-    private String symbo;
+    private String symbol;
 
     private String ext1;
 
@@ -121,12 +121,12 @@ public class TradeDetail {
         this.tradeId = tradeId == null ? null : tradeId.trim();
     }
 
-    public String getSymbo() {
-        return symbo;
+    public String getsymbol() {
+        return symbol;
     }
 
-    public void setSymbo(String symbo) {
-        this.symbo = symbo == null ? null : symbo.trim();
+    public void setsymbol(String symbol) {
+        this.symbol = symbol == null ? null : symbol.trim();
     }
 
     public String getExt1() {

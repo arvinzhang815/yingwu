@@ -97,18 +97,18 @@ public abstract class WebSocketBase {
      *
      * @param apiKey
      * @param secretKey
-     * @param symbol
+     * @param symboll
      * @param orderId
      * @param contractType
      */
     public void cancelFutureOrder(String apiKey, String secretKey,
-                                  String symbol, long orderId, String contractType) {
-        log.debug("apiKey=" + apiKey + ", secretKey=" + secretKey + ", symbol="
-                + symbol + ", orderId=" + orderId + ", contractType="
+                                  String symboll, long orderId, String contractType) {
+        log.debug("apiKey=" + apiKey + ", secretKey=" + secretKey + ", symboll="
+                + symboll + ", orderId=" + orderId + ", contractType="
                 + contractType);
         Map<String, String> preMap = new HashMap<String, String>();
         preMap.put("api_key", apiKey);
-        preMap.put("symbol", symbol);
+        preMap.put("symboll", symboll);
         preMap.put("order_id", String.valueOf(orderId));
         preMap.put("contract_type", contractType);
         String preStr = MD5Util.createLinkString(preMap);
@@ -127,16 +127,16 @@ public abstract class WebSocketBase {
      *
      * @param apiKey
      * @param secretKey
-     * @param symbol
+     * @param symboll
      * @param orderId
      */
-    public void cancelOrder(String apiKey, String secretKey, String symbol,
+    public void cancelOrder(String apiKey, String secretKey, String symboll,
                             Long orderId) {
-        log.debug("apiKey=" + apiKey + ", secretKey=" + secretKey + ", symbol="
-                + symbol + ", orderId=" + orderId);
+        log.debug("apiKey=" + apiKey + ", secretKey=" + secretKey + ", symboll="
+                + symboll + ", orderId=" + orderId);
         Map<String, String> preMap = new HashMap<String, String>();
         preMap.put("api_key", apiKey);
-        preMap.put("symbol", symbol);
+        preMap.put("symboll", symboll);
         preMap.put("order_id", orderId.toString());
         String preStr = MD5Util.createLinkString(preMap);
         StringBuilder preBuilder = new StringBuilder(preStr);
@@ -178,7 +178,7 @@ public abstract class WebSocketBase {
      *
      * @param apiKey
      * @param secretKey
-     * @param symbol
+     * @param symboll
      * @param contractType
      * @param price
      * @param amount
@@ -186,17 +186,17 @@ public abstract class WebSocketBase {
      * @param matchPrice
      * @param leverRate
      */
-    public void futureTrade(String apiKey, String secretKey, String symbol,
+    public void futureTrade(String apiKey, String secretKey, String symboll,
                             String contractType, double price, int amount, int type,
                             double matchPrice, int leverRate) {
-        log.debug("apiKey=" + apiKey + ", secretKey=" + secretKey + ", symbol="
-                + symbol + ", contractType=" + contractType + ", price="
+        log.debug("apiKey=" + apiKey + ", secretKey=" + secretKey + ", symboll="
+                + symboll + ", contractType=" + contractType + ", price="
                 + price + ", amount=" + amount + ", type=" + type
                 + ", matchPrice=" + matchPrice + ", leverRate=" + leverRate);
         Map<String, String> preMap = new HashMap<String, String>();
         // 待签名字符串
         preMap.put("api_key", apiKey);
-        preMap.put("symbol", symbol);
+        preMap.put("symboll", symboll);
         preMap.put("contract_type", contractType);
         preMap.put("price", String.valueOf(price));
         preMap.put("amount", String.valueOf(amount));
@@ -268,17 +268,17 @@ public abstract class WebSocketBase {
      * 现货交易下单
      *
      * @param apiKey
-     * @param symbol
+     * @param symboll
      * @param secretKey
      * @param price
      * @param amount
      * @param type
      */
-    public void spotTrade(String apiKey, String secretKey, String symbol,
+    public void spotTrade(String apiKey, String secretKey, String symboll,
                           String price, String amount, String type) {
         Map<String, String> signPreMap = new HashMap<String, String>();
         signPreMap.put("api_key", apiKey);
-        signPreMap.put("symbol", symbol);
+        signPreMap.put("symboll", symboll);
         if (price != null) {
             signPreMap.put("price", price);
         }

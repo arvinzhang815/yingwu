@@ -21,7 +21,7 @@ public class Depth {
 
     private String type;
 
-    private String symbo;
+    private String symbol;
 
     public Integer getId() {
         return id;
@@ -103,11 +103,11 @@ public class Depth {
         this.type = type == null ? null : type.trim();
     }
 
-    public String getSymbo() {
-        return symbo;
+    public String getsymbol() {
+        return symbol;
     }
 
-    public void setSymbo(String symbo) {
-        this.symbo = symbo == null ? null : symbo.trim();
+    public void setsymbol(String symbol) {
+        this.symbol = symbol == null ? null : symbol.trim();
     }
 }
