@@ -92,11 +92,10 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         ctx.close();
     }
 
-    private static void saveData(String data) throws DigitalException{
-        String testData = "{\"ch\":\"market.btcusdt.kline.1min\",\"ts\":1536115667264,\"tick\":{\"id\":1536115620,\"open\":7382.710000000000000000,\"close\":7382.790000000000000000,\"low\":7382.710000000000000000,\"high\":7384.550000000000000000,\"amount\":13.972300000000000000,\"vol\":103160.295965000000000000000000000000000000,\"count\":34}}\n";
-        JSONObject jsonObject = JSONObject.parseObject(testData);
+    private void saveData(String data) throws DigitalException{
+        JSONObject jsonObject = JSONObject.parseObject(data);
         if(jsonObject.getString("ch").contains("kline")){
-            KLine klineDto = JSONObject.parseObject(testData,KLine.class);
+            KLine klineDto = JSONObject.parseObject(jsonObject.getString("tick"),KLine.class);
             klineDto.setKlinId(klineDto.getId().toString());
             klineDto.setId(null);
             Map<String,String> returnMap = getSymbolByCh(jsonObject.getString("ch"));
@@ -104,8 +103,23 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
             klineDto.setTs(jsonObject.getString("ts"));
             klineDto.setsymbol(returnMap.get("symbol"));
             klineDto.setPeriod(returnMap.get("period"));
-            kLineMapper.insert(klineDto);
-            System.out.println(klineDto);
+            int count = kLineMapper.insert(klineDto);
+            if(count < 1){
+                throw new DigitalException("新增数据失败！" + jsonObject.getString("ch"));
+            }
+        }else if(jsonObject.getString("ch").contains("depth")){
+            KLine klineDto = JSONObject.parseObject(jsonObject.getString("tick"),KLine.class);
+            klineDto.setKlinId(klineDto.getId().toString());
+            klineDto.setId(null);
+            Map<String,String> returnMap = getSymbolByCh(jsonObject.getString("ch"));
+            klineDto.setChannel(jsonObject.getString("ch"));
+            klineDto.setTs(jsonObject.getString("ts"));
+            klineDto.setsymbol(returnMap.get("symbol"));
+            klineDto.setPeriod(returnMap.get("period"));
+            int count = kLineMapper.insert(klineDto);
+            if(count < 1){
+                throw new DigitalException("新增数据失败！" + jsonObject.getString("ch"));
+            }
         }
     }
     private static Map<String,String> getSymbolByCh(String ch){
@@ -117,6 +131,6 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
     }
 
     public static void main(String[] args) {
-        saveData("");
+//        saveData("");
     }
 }
