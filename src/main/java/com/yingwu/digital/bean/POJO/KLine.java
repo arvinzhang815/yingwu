@@ -131,11 +131,11 @@ public class KLine {
         this.period = period == null ? null : period.trim();
     }
 
-    public String getsymbol() {
+    public String getSymbol() {
         return symbol;
     }
 
-    public void setsymbol(String symbol) {
+    public void setSymbol(String symbol) {
         this.symbol = symbol == null ? null : symbol.trim();
     }
 

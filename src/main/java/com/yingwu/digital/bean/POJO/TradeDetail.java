@@ -121,11 +121,11 @@ public class TradeDetail {
         this.tradeId = tradeId == null ? null : tradeId.trim();
     }
 
-    public String getsymbol() {
+    public String getSymbol() {
         return symbol;
     }
 
-    public void setsymbol(String symbol) {
+    public void setSymbol(String symbol) {
         this.symbol = symbol == null ? null : symbol.trim();
     }
 

@@ -26,15 +26,19 @@ public class DigitalApplicationTests {
         client.open();
 
         // ## 发送string
+//        JSONObject sub = new JSONObject();
+//        sub.put("req", "market.btcusdt.depth.step0");
+//        sub.put("id", "id1000");
+//        client.sendText(sub.toString());
         JSONObject sub = new JSONObject();
-        sub.put("sub", "market.btcusdt.kline.1min");
+        sub.put("sub", "market.btcusdt.trade.detail");
         sub.put("id", "id1000");
         client.sendText(sub.toString());
         //订阅其他信息
-        JSONObject sub1 = new JSONObject();
-        sub1.put("sub", "market.ltcbtc.kline.1min");
-        sub1.put("id", "id100");
-        client.sendText(sub1.toString());
+//        JSONObject sub1 = new JSONObject();
+//        sub1.put("sub", "market.ltcbtc.kline.1min");
+//        sub1.put("id", "id100");
+//        client.sendText(sub1.toString());
 
         // ## 阻塞住线程
         CountDownLatch latch = new CountDownLatch(1);
