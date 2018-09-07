@@ -5,11 +5,9 @@ import com.yingwu.digital.base.DigitalException;
 import com.yingwu.digital.bean.POJO.Depth;
 import com.yingwu.digital.bean.POJO.KLine;
 import com.yingwu.digital.bean.POJO.TradeDetail;
-import com.yingwu.digital.bean.dto.KlineDto;
 import com.yingwu.digital.bean.dto.Tick;
 import com.yingwu.digital.bean.dto.TradeDataDto;
 import com.yingwu.digital.bean.dto.TradeDetailDto;
-import com.yingwu.digital.bean.dto.TradeDetailDto.*;
 import com.yingwu.digital.dao.DepthMapper;
 import com.yingwu.digital.dao.KLineMapper;
 import com.yingwu.digital.dao.MarketDetailMapper;
@@ -25,11 +23,8 @@ import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 
-import javax.tools.Diagnostic;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,7 +84,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
 
         // ## 需要解压的二进制数据
         String str = GZipUtil.deToString(GameUtil.toBytes(buf));
-//        saveData(str);
+        saveData(str);
         System.out.println(str);
 
         JSONObject json = JSONObject.parseObject(str);
@@ -115,47 +110,59 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
 
     private void saveData(String data) throws DigitalException{
         JSONObject jsonObject = JSONObject.parseObject(data);
-        if(jsonObject.getString("ch").contains("kline")){
-            KLine klineDto = JSONObject.parseObject(jsonObject.getString("tick"),KLine.class);
-            klineDto.setKlinId(klineDto.getId().toString());
-            klineDto.setId(null);
-            Map<String,String> returnMap = getSymbolByCh(jsonObject.getString("ch"));
-            klineDto.setChannel(jsonObject.getString("ch"));
-            klineDto.setTs(jsonObject.getString("ts"));
-            klineDto.setSymbol(returnMap.get("symbol"));
-            klineDto.setPeriod(returnMap.get("period"));
-            int count = kLineMapper.insert(klineDto);
-            if(count < 1){
-                throw new DigitalException("新增Kline数据失败！" + jsonObject.getString("ch") + jsonObject.getString("ts"));
-            }
-        }else if(jsonObject.getString("ch").contains("depth")){
-            Depth Depth = JSONObject.parseObject(jsonObject.getString("tick"),Depth.class);
-            Map<String,String> returnMap = getSymbolByCh(jsonObject.getString("ch"));
-            Depth.setChannel(jsonObject.getString("ch"));
-            Depth.setTs(jsonObject.getString("ts"));
-            Depth.setSymbol(returnMap.get("symbol"));
-            int count = depthMapper.insert(Depth);
-            if(count < 1){
-                throw new DigitalException("新增depth数据失败！" + jsonObject.getString("ch") + jsonObject.getString("ts"));
-            }
-        }else if (jsonObject.getString("ch").contains("trade")){
-            TradeDetailDto tradeDetailDto = JSONObject.parseObject(data,TradeDetailDto.class);
-            Map<String,String> returnMap = getSymbolByCh(jsonObject.getString("ch"));
-            if(tradeDetailDto.getTick() != null && tradeDetailDto.getTick().getData() != null &&
-                    tradeDetailDto.getTick().getData().size() > 0){
-                for (TradeDataDto tmp : tradeDetailDto.getTick().getData()){
-                    TradeDetail tradeDetail = new TradeDetail();
-                    tradeDetail.setChannel(tradeDetailDto.getCh());
-                    tradeDetail.setSymbol(returnMap.get("symbol"));
-                    BaseBeanUtils.copyPropertiesIgnoreNull(tradeDetailDto,tradeDetail);
-                    BaseBeanUtils.copyPropertiesIgnoreNull(tmp,tradeDetail);
-                    int count = tradeDetailMapper.insert(tradeDetail);
-                    if(count < 1){
-                        throw new DigitalException("新增tradeDetail数据失败！" + jsonObject.getString("ch") + jsonObject.getString("ts"));
+        if(jsonObject.containsKey("ch")) {
+            System.out.println(data);
+            if (jsonObject.getString("ch").contains("kline")) {
+                KLine klineDto = JSONObject.parseObject(jsonObject.getString("tick"), KLine.class);
+                klineDto.setKlinId(klineDto.getId().toString());
+                klineDto.setId(null);
+                Map<String, String> returnMap = getSymbolByCh(jsonObject.getString("ch"));
+                klineDto.setChannel(jsonObject.getString("ch"));
+                klineDto.setTs(jsonObject.getString("ts"));
+                klineDto.setSymbol(returnMap.get("symbol"));
+                klineDto.setPeriod(returnMap.get("period"));
+                int count = kLineMapper.insert(klineDto);
+                if (count < 1) {
+                    throw new DigitalException("新增Kline数据失败！" + jsonObject.getString("ch") + jsonObject.getString("ts"));
+                }
+            } else if (jsonObject.getString("ch").contains("depth")) {
+                Depth Depth = JSONObject.parseObject(jsonObject.getString("tick"), Depth.class);
+                Map<String, String> returnMap = getSymbolByCh(jsonObject.getString("ch"));
+                Depth.setChannel(jsonObject.getString("ch"));
+                Depth.setTs(jsonObject.getString("ts"));
+                Depth.setSymbol(returnMap.get("symbol"));
+                int count = depthMapper.insert(Depth);
+                if (count < 1) {
+                    throw new DigitalException("新增depth数据失败！" + jsonObject.getString("ch") + jsonObject.getString("ts"));
+                }
+            } else if (jsonObject.getString("ch").contains("trade")) {
+                TradeDetailDto tradeDetailDto = JSONObject.parseObject(data, TradeDetailDto.class);
+                Map<String, String> returnMap = getSymbolByCh(jsonObject.getString("ch"));
+                if (tradeDetailDto.getTick() != null && tradeDetailDto.getTick().getData() != null &&
+                        tradeDetailDto.getTick().getData().size() > 0) {
+                    Tick tick = tradeDetailDto.getTick();
+                    for (TradeDataDto tmp : tradeDetailDto.getTick().getData()) {
+                        TradeDetail tradeDetail = new TradeDetail();
+                        tradeDetail.setChannel(tradeDetailDto.getCh());
+                        tradeDetail.setSymbol(returnMap.get("symbol"));
+                        BaseBeanUtils.copyPropertiesIgnoreNull(tmp, tradeDetail);
+                        tradeDetail.setTickId(tick.getId());
+                        tradeDetail.setTradeTs(tick.getTs());
+                        tradeDetail.setMsgId(tmp.getId());
+                        tradeDetail.setTradeTime(tmp.getTime());
+                        int count = 0;
+                        try {
+                            count = tradeDetailMapper.insertSelective(tradeDetail);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (count < 1) {
+                            throw new DigitalException("新增tradeDetail数据失败！" + jsonObject.getString("ch") + jsonObject.getString("ts"));
+                        }
                     }
                 }
-            }
 
+            }
         }
     }
     private static Map<String,String> getSymbolByCh(String ch){
@@ -166,21 +173,4 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         return returnMap;
     }
 
-    public static void main(String[] args) {
-//        saveData("");
-        String data = "{\"ch\":\"market.btcusdt.trade.detail\",\"ts\":1536219685504,\"tick\":{\"id\":18825105385,\"ts\":1536219685343,\"data\":[{\"amount\":2.184400000000000000,\"ts\":1536219685343,\"id\":1882510538511782201841,\"price\":6429.000000000000000000,\"direction\":\"sell\"},{\"amount\":2.184400000000000000,\"ts\":1536219685343,\"id\":1882510538511782201841,\"price\":6429.000000000000000000,\"direction\":\"sell\"}]}}";
-        TradeDetailDto tradeDetailDto = JSONObject.parseObject(data,TradeDetailDto.class);
-        Map<String,String> returnMap = getSymbolByCh("market.btcusdt.trade.detail");
-        if(tradeDetailDto.getTick() != null && tradeDetailDto.getTick().getData() != null &&
-                tradeDetailDto.getTick().getData().size() > 0){
-            for (TradeDataDto tmp : tradeDetailDto.getTick().getData()){
-                TradeDetail tradeDetail = new TradeDetail();
-                tradeDetail.setChannel(tradeDetailDto.getCh());
-                tradeDetail.setSymbol(returnMap.get("symbol"));
-                BaseBeanUtils.copyPropertiesIgnoreNull(tmp,tradeDetail);
-
-                System.out.println(tradeDetail);
-            }
-        }
-    }
 }

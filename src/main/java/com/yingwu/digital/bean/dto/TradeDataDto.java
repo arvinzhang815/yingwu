@@ -1,5 +1,7 @@
 package com.yingwu.digital.bean.dto;
 
+import java.math.BigDecimal;
+
 /**
  * @author Created by: zhangbingbing
  * @date 2018/8/27
@@ -8,9 +10,9 @@ package com.yingwu.digital.bean.dto;
 public class TradeDataDto {
 
     private String id;//消息ID
-    private String price;//成交价
+    private BigDecimal price;//成交价
     private String time;//成交时间
-    private String amount;//成交量
+    private BigDecimal amount;//成交量
     private String direction;//成交方向
     private String tradeId;//成交ID
     private String ts;//时间戳
@@ -23,11 +25,11 @@ public class TradeDataDto {
         this.id = id;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -39,11 +41,11 @@ public class TradeDataDto {
         this.time = time;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
