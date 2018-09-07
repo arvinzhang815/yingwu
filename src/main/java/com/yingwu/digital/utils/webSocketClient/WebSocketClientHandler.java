@@ -12,43 +12,48 @@ import com.yingwu.digital.dao.DepthMapper;
 import com.yingwu.digital.dao.KLineMapper;
 import com.yingwu.digital.dao.MarketDetailMapper;
 import com.yingwu.digital.dao.TradeDetailMapper;
+import com.yingwu.digital.service.HuobiApiService;
 import com.yingwu.digital.utils.BaseBeanUtils;
 import com.yingwu.digital.utils.GZipUtil;
 import com.yingwu.digital.utils.GameUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
-import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.websocketx.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-
+@Component
+@ChannelHandler.Sharable
 public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> {
 
-    @Autowired
-    private KLineMapper kLineMapper;
+//    @Autowired
+//    private KLineMapper kLineMapper;
 
     @Autowired
-    private DepthMapper depthMapper;
-
-    @Autowired
-    private MarketDetailMapper marketDetailMapper;
-
-    @Autowired
-    private TradeDetailMapper tradeDetailMapper;
+    private HuobiApiService huobiApiService;
+//    private DepthMapper depthMapper;
+//
+//    @Autowired
+//    private MarketDetailMapper marketDetailMapper;
+//
+//    @Autowired
+//    private TradeDetailMapper tradeDetailMapper;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketClientHandler.class);
 
-    private final WebSocketClientHandshaker handShaker;
+    private WebSocketClientHandshaker handShaker;
     private ChannelPromise handshakeFuture;
 
-    public WebSocketClientHandler(final WebSocketClientHandshaker handShaker) {
-        this.handShaker = handShaker;
+    public void setHandShaker(URI uri) {
+        this.handShaker = WebSocketClientHandshakerFactory.newHandshaker(
+                uri, WebSocketVersion.V13, null, false, HttpHeaders.EMPTY_HEADERS, 1280000);
     }
 
     public ChannelFuture handshakeFuture() {
@@ -121,7 +126,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 klineDto.setTs(jsonObject.getString("ts"));
                 klineDto.setSymbol(returnMap.get("symbol"));
                 klineDto.setPeriod(returnMap.get("period"));
-                int count = kLineMapper.insert(klineDto);
+                int count = 1/*kLineMapper.insert(klineDto)*/;
                 if (count < 1) {
                     throw new DigitalException("新增Kline数据失败！" + jsonObject.getString("ch") + jsonObject.getString("ts"));
                 }
@@ -131,7 +136,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 Depth.setChannel(jsonObject.getString("ch"));
                 Depth.setTs(jsonObject.getString("ts"));
                 Depth.setSymbol(returnMap.get("symbol"));
-                int count = depthMapper.insert(Depth);
+                int count = 1/*depthMapper.insert(Depth)*/;
                 if (count < 1) {
                     throw new DigitalException("新增depth数据失败！" + jsonObject.getString("ch") + jsonObject.getString("ts"));
                 }
@@ -152,7 +157,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                         tradeDetail.setTradeTime(tmp.getTime());
                         int count = 0;
                         try {
-                            count = tradeDetailMapper.insertSelective(tradeDetail);
+//                            count = tradeDetailMapper.insertSelective(tradeDetail);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

@@ -35,10 +35,8 @@ public class WebSocketClient {
             throw new IllegalArgumentException("Unsupported protocol: " + protocol);
         }
 
-        final WebSocketClientHandler handler =
-                new WebSocketClientHandler(
-                        WebSocketClientHandshakerFactory.newHandshaker(
-                                uri, WebSocketVersion.V13, null, false, HttpHeaders.EMPTY_HEADERS, 1280000));
+        final WebSocketClientHandler handler = new WebSocketClientHandler();
+        handler.setHandShaker(uri);
 
         MychannelInitializer myChannelInitializer = new MychannelInitializer(handler);
         b.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);

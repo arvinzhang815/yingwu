@@ -2,7 +2,9 @@ package com.yingwu.digital.dao;
 
 
 import com.yingwu.digital.bean.POJO.KLine;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface KLineMapper {
     int deleteByPrimaryKey(Integer id);
 
